@@ -151,6 +151,9 @@ var ListView = View.extend({
         if (unsorted && default_order && !this.grouped) {
             this.dataset.set_sort(default_order.split(','));
         }
+
+        // Skip Click
+        this.options.skip_click = this.fields_view.arch.attrs.skip_click;
     },
     willStart: function() {
         var self = this;
@@ -478,7 +481,7 @@ var ListView = View.extend({
             }
             record.trigger('change', record);
 
-            /* When a record is reloaded, there is a rendering lag because of the addition/suppression of 
+            /* When a record is reloaded, there is a rendering lag because of the addition/suppression of
             a table row. Since the list view editable need to wait for the end of this rendering lag before
             computing the position of the editable fields, a 100ms delay is added. */
             var def = $.Deferred();
@@ -902,7 +905,7 @@ ListView.List = Class.extend({
      *
      * @constructs instance.web.ListView.List
      * @extends instance.web.Class
-     * 
+     *
      * @param {Object} opts display options, identical to those of :js:class:`instance.web.ListView`
      */
     init: function (group, opts) {
@@ -999,7 +1002,7 @@ ListView.List = Class.extend({
                       field = $target.closest('td').data('field'),
                        $row = $target.closest('tr'),
                   record_id = self.row_id($row);
-                
+
                 if ($target.attr('disabled')) {
                     return;
                 }
@@ -1029,10 +1032,12 @@ ListView.List = Class.extend({
             });
     },
     row_clicked: function (e, view) {
-        $(this).trigger(
-            'row_link',
-            [this.dataset.ids[this.dataset.index],
-             this.dataset, view]);
+        if (this.options.skip_click === undefined) {
+            $(this).trigger(
+                'row_link',
+                [this.dataset.ids[this.dataset.index],
+                 this.dataset, view]);
+        }
     },
     render_cell: function (record, column) {
         var value;
@@ -1405,7 +1410,7 @@ ListView.Groups = Class.extend({
                     }
                     group_label = _.str.escapeHTML(group_label);
                 }
-                    
+
                 // group_label is html-clean (through format or explicit
                 // escaping if format failed), can inject straight into HTML
                 $group_column.html(_.str.sprintf("%s (%d)",
@@ -1802,7 +1807,7 @@ var MetaColumn = Column.extend({
     }
 });
 // to do: do this in a better way (communicate with view_list_editable)
-ListView.MetaColumn = MetaColumn;  
+ListView.MetaColumn = MetaColumn;
 
 var ColumnButton = Column.extend({
     /**
