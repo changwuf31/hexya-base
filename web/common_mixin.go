@@ -214,7 +214,7 @@ func init() {
 		This method is meant to be overridden in addons that want
  		to give specific view ids for example.`,
 		func(rs pool.CommonMixinSet) string {
-			return ""
+			return rs.Env().Context().GetString("form_view_ref")
 		}).AllowGroup(security.GroupEveryone)
 
 	commonMixin.Methods().GetFormviewAction().DeclareMethod(

@@ -146,7 +146,7 @@ var FieldMany2One = common.AbstractField.extend(common.CompletionFieldMixin, com
             }
             var context = self.build_context().eval();
             var model_obj = new Model(self.field.relation);
-            model_obj.call('get_formview_id', [[self.get("value")], context]).then(function(view_id){
+            model_obj.call('get_formview_id', [[self.get("value"), context]], {"context": context}).then(function(view_id){
                 var pop = new common.FormViewDialog(self, {
                     res_model: self.field.relation,
                     res_id: self.get("value"),
