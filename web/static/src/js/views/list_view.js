@@ -1712,6 +1712,8 @@ var Column = Class.extend({
             id: id,
             tag: tag
         });
+        this.options = attrs.options ? JSON.parse(attrs.options.replace(/\'/g, '"')) : {};
+        delete attrs.options;
         this.modifiers = attrs.modifiers ? JSON.parse(attrs.modifiers) : {};
         delete attrs.modifiers;
         _.extend(this, attrs);
