@@ -21,6 +21,9 @@ function format_value (value, descriptor, value_if_empty) {
     var l10n = _t.database.parameters;
     var date_format = time.strftime_to_moment_format(l10n.date_format);
     var time_format = time.strftime_to_moment_format(l10n.time_format);
+    if (descriptor.options && descriptor.options.date_format) {
+        date_format = time.strftime_to_moment_format(descriptor.options.date_format);
+    }
     // If NaN value, display as with a `false` (empty cell)
     if (typeof value === 'number' && isNaN(value)) {
         value = false;
